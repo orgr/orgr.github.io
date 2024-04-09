@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    
+    
+    
+    <title>
+         Kaspa whale alert
+        
+    </title>
+
+        
+            <meta property="og:title" content="Kaspa whale alert" />
+        
+     
+
+     
+         
+             <meta property="og:description" content="a Twitter whale alert for the Kaspa network" />
+         
+     
+
+     
+         
+             <meta name="description" content="a Twitter whale alert for the Kaspa network" />
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://orgr.github.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+        
+            
+            
+
+            <script>
+                (function () {
+                  var el = document.createElement('script');
+                  el.setAttribute('src', '/js/imamu.js');
+                  el.setAttribute('data-website-id', 'bf1396fc-59da-42d2-beeb-ede18c55be4d');
+                  el.setAttribute('data-host-url', 'https:&#x2F;&#x2F;analytics.eu.umami.is');
+                  document.body.appendChild(el);
+                })();
+              </script>
+            <script async src="/js/imamu.js" data-website-id="bf1396fc-59da-42d2-beeb-ede18c55be4d" data-host-url="https:&#x2F;&#x2F;analytics.eu.umami.is"></script>
+        
+
+        
+    
+
+
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="0r" href="https://orgr.github.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href=https://orgr.github.io/theme/light.css />
+        <link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://orgr.github.io/theme/dark.css" />
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://orgr.github.io/main.css />
+
+    
+</head>
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        <a href=https:&#x2F;&#x2F;orgr.github.io>0r</a>
+
+        <div class="socials">
+            
+            <a rel="me" href="https:&#x2F;&#x2F;github.com&#x2F;orgr" class="social">
+                <img alt=github src=https://orgr.github.io/social_icons/github.svg>
+            </a>
+            
+            <a rel="me" href="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;or-grinberg&#x2F;" class="social">
+                <img alt=linkedin src=https://orgr.github.io/social_icons/linkedin.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+        <a href=https://orgr.github.io style="margin-left: 0.7em">home</a>
+        
+        <a href=https://orgr.github.io/projects style="margin-left: 0.7em">projects</a>
+        
+        <a href=https://orgr.github.io/about style="margin-left: 0.7em">about</a>
+        
+
+        
+        | <a id="dark-mode-toggle" onclick="toggleTheme()" href="javascript:void(0)">
+            <img src=https://orgr.github.io/feather/sun.svg id="sun-icon" style="filter: invert(1);" />
+            <img src=https://orgr.github.io/feather/moon.svg id="moon-icon" />
+        </a>
+        <script src=https://orgr.github.io/js/themetoggle.js></script>
+        
+    </nav>
+</header>
+
+
+        
+        
+    
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        Kaspa whale alert<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+
+                    
+                </div>
+        </div>
+
+        
+
+        
+        
+
+        <section class="body">
+            <h2 id="links">links</h2>
+<ul>
+<li><a href="https://www.twitter.com/kas_whale_alert">Twitter account</a></li>
+<li><a href="https://www.github.com/orgr/kaspa-whale-alert">source code</a></li>
+</ul>
+<h2 id="motivation">motivation</h2>
+<p>Started as a toy project to learn more about both Rust and Kaspa/cryptocurrencies.</p>
+<p>Kaspa was fertile ground for building things that already exist in other networks
+so I figured it could be interesting both learning
+and to be the first one for building something (somewhat) useful.
+*insert GLORY! emoji here*</p>
+<h2 id="how">how</h2>
+<p>Basically it's just a service that runs on fly.io
+--back in the old days when it was free 🤑-- ,
+and subscribes to the block-updates socket.io channel
+which is generously exposed via official REST API of Kaspa.</p>
+<p>For every new block, we go over all the transactions
+in search for exceptionally large amounts.
+If found any, the service tweets about it with some of it's metadata.</p>
+<p>There is no official definition of &quot;exceptionally large&quot;
+so I count it as a a fraction of the total supply,
+usually around 0.1% (mentioning a $ amount here is useless...).</p>
+<p>At first the alerts only included the raw kaspa amount,
+later on I added a conversion to USD$.</p>
+<h2 id="a-small-lesson-about-utxos">a small lesson about UTXOs</h2>
+<p>At some point, I realised there were too many alerts, like a few every day.
+The reason was that wallets sometime aggregate many small UTXOs into a large one,
+but effectively Mr Whale here didn't move the money to someone else.
+So I had to filter transactions
+in which the payer address and payee address are the same,
+sounds trivial, but in UTXO-based blockchains
+the payer address is not specifically mentioned
+- it's just a UTXO, the payer is just another transaction,
+so I had to query for the earlier transaction's payee address.</p>
+<h2 id="another-cool-idea-with-horrible-implementation-hand-over-mouth">another cool idea with horrible implementation 🤭</h2>
+<p>I got requests from some Kaspa fans to extend the alerts with
+whether a whale transaction came from an exchange or not,
+and if so from which one.</p>
+<p>To do that I had to store somewhere a map of addresses and exchange names.
+Usually you'll need a database for it,
+and update it when new exchanges list Kaspa or change wallets.
+Then to track those changes, maybe using dummy accounts in each of the exchanges.
+But I'm a simple man 😅 I just hardcoded a copy of a list I saw somewhere.</p>
+
+        </section>
+
+        
+
+    </article>
+</main>
+
+
+        
+        
+    </div>
+</body>
+
+</html>
